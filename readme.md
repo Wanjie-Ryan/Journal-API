@@ -1,0 +1,1 @@
+1. I used MSQL WORKBENCH for the database connection
