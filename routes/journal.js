@@ -16,10 +16,6 @@ router.get("/getAllJournals", AuthMiddleware, getAllJournals);
 router.get("/getSingleJournal/:id", AuthMiddleware, getSingleJournal);
 router.put("/updateJournal/:id", AuthMiddleware, updateJournal);
 router.delete("/deleteJournal/:id", AuthMiddleware, deleteJournal);
-router.get(
-  "/categoryJournals/:category",
-  AuthMiddleware,
-  getJournalsByCategory
-);
+router.get("/categoryJournals", AuthMiddleware, getJournalsByCategory);
 
 module.exports = router;
