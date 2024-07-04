@@ -85,4 +85,23 @@ const Login = async (req, res) => {
   }
 };
 
-module.exports = { Register, Login };
+// FOR PROTECTING ROUTES IN THE FRONTEND
+const verifyToken = async (req, res, next) => {
+  try {
+    if (req.headers.authorization) {
+      const authHeader = req.headers.authorization;
+      const token = authHeader.replace("Bearer ", "");
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.token = decoded;
+      res.json({ type: "success" });
+      // next()
+    } else {
+      res.status(StatusCodes.UNAUTHORIZED).json({ msg: "Token is bad" });
+    }
+  } catch (err) {
+    // res.json({ type: 'error', message: 'Please authenticate', details: err })
+    return res.status(StatusCodes.UNAUTHORIZED).json({ msg: "Invalid token" });
+  }
+};
+
+module.exports = { Register, Login, verifyToken };
