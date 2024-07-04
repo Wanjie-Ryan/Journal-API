@@ -108,29 +108,52 @@ const getSingleJournal = async (req, res) => {
   }
 };
 
-const updateJournal = async(req,res)=>{
+const updateJournal = async (req, res) => {
+  try {
+    const { id: journalId } = req.params;
+    const { title, content, category, date } = req.body;
 
-    try{
+    // Find the journal entry by its ID
+    const journal = await journalModel.findByPk(journalId);
 
-
+    // If journal is not found
+    if (!journal) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Journal not found" });
     }
-    catch(err){
-        console.log(err)
 
-        if (err.name === "SequelizeUniqueConstraintError") {
-            const errorMessage = err.errors.map((error) => error.message).join(", ");
-            return res
-              .status(StatusCodes.BAD_REQUEST)
-              .json({ message: errorMessage });
-          }
-      
-          return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .json({ message: err.message });
-        }
-    
+    // Update journal entry with new values
+    journal.title = title;
+    journal.content = content;
+    journal.category = category;
+    journal.date = date;
 
-}
+    // Save the updated journal entry
+    await journal.save();
 
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: "Journal updated successfully", journal });
+  } catch (err) {
+    console.error("Error updating journal:", err);
 
-module.exports = { createJournal, getAllJournals, getSingleJournal, updateJournal };
+    if (err.name === "SequelizeUniqueConstraintError") {
+      const errorMessage = err.errors.map((error) => error.message).join(", ");
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: errorMessage });
+    }
+
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: err.message });
+  }
+};
+
+module.exports = {
+  createJournal,
+  getAllJournals,
+  getSingleJournal,
+  updateJournal,
+};
