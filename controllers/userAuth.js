@@ -20,7 +20,7 @@ const Register = async (req, res) => {
       email,
       password: hashedPassword,
     });
-    console.log(user);
+    // console.log(user);
 
     return res
       .status(StatusCodes.CREATED)
@@ -40,6 +40,49 @@ const Register = async (req, res) => {
   }
 };
 
-const Login = async (req, res) => {};
+// CREATING THE LOGIN CONTROLLER WHERE THE USER CAN PASS IN THE EMAIL AND PASSWORD IN THE BODY, IT RETURNS A TOKEN IF THE LOGIN IS SUCCESSFUL
+
+const Login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "Provide all the fields" });
+    }
+
+    const user = await userModel.findOne({ where: { email } });
+    // console.log(user);
+
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({ msg: "User not found" });
+    }
+
+    if (user && (await bcrypt.compare(password, user.password))) {
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+      });
+      res.status(StatusCodes.OK).json({ token });
+    } else {
+      res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({ error: "Invalid credentials" });
+    }
+  } catch (err) {
+    // console.log(err);
+
+    if (err.name === "SequelizeUniqueConstraintError") {
+      const errorMessage = err.errors.map((error) => error.message).join(", ");
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: errorMessage });
+    }
+
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: "Something went wrong, try again later" });
+  }
+};
 
 module.exports = { Register, Login };
