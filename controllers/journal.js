@@ -158,9 +158,21 @@ const updateJournal = async (req, res) => {
   }
 };
 
+const deleteJournal = async(req,res)=>{
+
+    try{
+
+
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
 module.exports = {
   createJournal,
   getAllJournals,
   getSingleJournal,
   updateJournal,
+  deleteJournal
 };
