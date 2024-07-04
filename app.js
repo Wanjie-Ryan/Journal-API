@@ -11,6 +11,7 @@ const sequelize = require("./connection/connection");
 const { StatusCodes } = require("http-status-codes");
 const userRoutes = require("./routes/userAuth");
 const journalRoutes = require("./routes/journal");
+const SummaryjournalRoutes = require("./routes/summary");
 const app = express();
 
 // END OF IMPORTS
@@ -33,6 +34,7 @@ app.use(cors());
 
 app.use("/api/auth", userRoutes);
 app.use("/api/v1", journalRoutes);
+app.use("/api/summary", SummaryjournalRoutes);
 
 // SERVER START-UP
 
