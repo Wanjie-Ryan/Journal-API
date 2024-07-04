@@ -2,13 +2,16 @@
 const express = require("express");
 const router = express.Router();
 const {
-    createJournal, getAllJournals,getSingleJournal
+  createJournal,
+  getAllJournals,
+  getSingleJournal,
+  updateJournal,
 } = require("../controllers/journal");
 const AuthMiddleware = require("../middleware/authMiddleware");
 
 router.post("/createjournal", AuthMiddleware, createJournal);
 router.get("/getAllJournals", AuthMiddleware, getAllJournals);
 router.get("/getSingleJournal/:id", AuthMiddleware, getSingleJournal);
-
+router.get("/updateJournal/:id", AuthMiddleware, updateJournal);
 
 module.exports = router;

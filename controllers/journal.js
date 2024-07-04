@@ -78,6 +78,8 @@ const getAllJournals = async (req, res) => {
   }
 };
 
+//  A METHOD TO GET JOURNAL BY ID, GETTING A SINGLE JOURNAL
+
 const getSingleJournal = async (req, res) => {
   try {
     const { id: journalId } = req.params;
@@ -106,4 +108,29 @@ const getSingleJournal = async (req, res) => {
   }
 };
 
-module.exports = { createJournal, getAllJournals, getSingleJournal };
+const updateJournal = async(req,res)=>{
+
+    try{
+
+
+    }
+    catch(err){
+        console.log(err)
+
+        if (err.name === "SequelizeUniqueConstraintError") {
+            const errorMessage = err.errors.map((error) => error.message).join(", ");
+            return res
+              .status(StatusCodes.BAD_REQUEST)
+              .json({ message: errorMessage });
+          }
+      
+          return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: err.message });
+        }
+    
+
+}
+
+
+module.exports = { createJournal, getAllJournals, getSingleJournal, updateJournal };
