@@ -9,7 +9,7 @@ const cookie = require("cookie-parser");
 const rateLimit = require("express-rate-limit");
 const sequelize = require("./connection/connection");
 const { StatusCodes } = require("http-status-codes");
-// const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/userAuth');
 // const journalRoutes = require('./routes/journal');
 const app = express();
 
@@ -31,7 +31,7 @@ app.use(cors());
 
 // ROUTES INITIALIZATION
 
-// app.use('/users', userRoutes);
+app.use('/api/auth', userRoutes);
 // app.use('/journal', journalRoutes);
 
 // SERVER START-UP

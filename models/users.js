@@ -4,7 +4,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../connection/connection");
 
 const User = sequelize.define(
-  "User",
+  "user",
   {
     id: {
       type: DataTypes.UUID,
@@ -56,6 +56,7 @@ const User = sequelize.define(
     },
   },
   {
+    tableName: "user",
     timestamps: true,
   }
 );

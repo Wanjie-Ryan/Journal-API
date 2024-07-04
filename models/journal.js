@@ -79,6 +79,7 @@ const Journal = sequelize.define(
     },
   },
   {
+    tableName: "journalentry",
     timestamps: true,
   }
 );
