@@ -85,6 +85,42 @@ const Login = async (req, res) => {
   }
 };
 
+// UPDATING THE PROFILE OF THE USER, BOTH THE PASSWORD AND THE USERNAME
+const UpdateProfile = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    const user = await userModel.findOne({ where: { username } });
+
+    if (!user) {
+      return res.status(StatusCodes.NOT_FOUND).json({ msg: "User not found" });
+    }
+
+    if (user) {
+      if (password) {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        user.password = hashedPassword;
+      }
+      user.username = username;
+      await user.save();
+      res.status(StatusCodes.OK).json({ msg: "User updated successfully" });
+    }
+  } catch (err) {
+    console.log(err);
+
+    if (err.name === "SequelizeUniqueConstraintError") {
+      const errorMessage = err.errors.map((error) => error.message).join(", ");
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: errorMessage });
+    }
+
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: "Something went wrong, try again later" });
+  }
+};
+
 // FOR PROTECTING ROUTES IN THE FRONTEND
 const verifyToken = async (req, res, next) => {
   try {
@@ -104,4 +140,4 @@ const verifyToken = async (req, res, next) => {
   }
 };
 
-module.exports = { Register, Login, verifyToken };
+module.exports = { Register, Login, verifyToken, UpdateProfile };
