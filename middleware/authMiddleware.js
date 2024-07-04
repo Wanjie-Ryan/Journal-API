@@ -4,14 +4,14 @@ const { StatusCodes } = require("http-status-codes");
 const AuthMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
-//   console.log(authHeader)
+  //   console.log(authHeader)
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(StatusCodes.UNAUTHORIZED).send("No Token was provided");
   }
 
   const token = authHeader.split(" ")[1];
-//   console.log(token)
+  //   console.log(token)
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -21,7 +21,7 @@ const AuthMiddleware = async (req, res, next) => {
     req.user = { id };
     next();
   } catch (err) {
-    console.log(err)
+    console.log(err);
 
     if (err instanceof jwt.JsonWebTokenError) {
       return res.status(StatusCodes.UNAUTHORIZED).send("Invalid token");
