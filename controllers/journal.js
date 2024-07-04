@@ -55,7 +55,7 @@ const getAllJournals = async (req, res) => {
         return res.status(StatusCodes.NOT_FOUND).json({ msg: 'No journals found' });
       }
     } catch (err) {
-      console.error("Error retrieving journals:", err);
+    //   console.error("Error retrieving journals:", err);
   
       if (err.name === "SequelizeUniqueConstraintError") {
         const errorMessage = err.errors.map((error) => error.message).join(", ");
@@ -66,7 +66,24 @@ const getAllJournals = async (req, res) => {
     }
   };
 
-  
+  const getSingleJournal = async(req,res)=>{
+
+    try{
+
+
+    }
+    catch(err){
+        console.log(err)
+        if (err.name === "SequelizeUniqueConstraintError") {
+            const errorMessage = err.errors.map((error) => error.message).join(", ");
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: errorMessage });
+          }
+      
+          return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message });
+    }
+
+
+  }
   
 
-module.exports = { createJournal, getAllJournals };
+module.exports = { createJournal, getAllJournals,getSingleJournal };

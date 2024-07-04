@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const {
-    createJournal, getAllJournals
+    createJournal, getAllJournals,getSingleJournal
 } = require("../controllers/journal");
 const AuthMiddleware = require("../middleware/authMiddleware");
 
