@@ -158,48 +158,87 @@ const updateJournal = async (req, res) => {
   }
 };
 
-const deleteJournal = async(req,res)=>{
+const deleteJournal = async (req, res) => {
+  try {
+    const { id: journalId } = req.params;
 
-    try{
+    const journal = await journalModel.findByPk(journalId);
 
-        const { id: journalId } = req.params;
-
-        const journal = await journalModel.findByPk(journalId);
-
-        if (!journal) {
-            return res
-              .status(StatusCodes.NOT_FOUND)
-              .json({ message: "Journal not found" });
-          }
-
-          await journal.destroy();
-
-          return res
-           .status(StatusCodes.OK)
-           .json({ message: "Journal deleted successfully" });
-
-
-
+    if (!journal) {
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: "Journal not found" });
     }
-    catch(err){
-        console.log(err)
-        if (err.name === "SequelizeUniqueConstraintError") {
-            const errorMessage = err.errors.map((error) => error.message).join(", ");
-            return res
-              .status(StatusCodes.BAD_REQUEST)
-              .json({ message: errorMessage });
-          }
-      
-          return res
-            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-            .json({ message: err.message });
+
+    await journal.destroy();
+
+    return res
+      .status(StatusCodes.OK)
+      .json({ message: "Journal deleted successfully" });
+  } catch (err) {
+    // console.log(err)
+    if (err.name === "SequelizeUniqueConstraintError") {
+      const errorMessage = err.errors.map((error) => error.message).join(", ");
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: errorMessage });
     }
-}
+
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: err.message });
+  }
+};
+
+// Retrieve journals filtered by category
+const getJournalsByCategory = async (req, res) => {
+    try {
+      const { category } = req.query;
+  
+      if (!category) {
+        return res
+          .status(StatusCodes.BAD_REQUEST)
+          .json({ msg: "Category parameter is required for filtering" });
+      }
+  
+      const Journals = await journalModel.findAll({
+        where: {
+          category: category.toLowerCase(), // Ensure case-insensitive comparison
+        },
+      });
+  
+      if (Journals.length > 0) {
+        return res
+          .status(StatusCodes.OK)
+          .json({ msg: `Journals filtered by category: ${category}`, Journals });
+      } else {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ msg: `No journals found with category: ${category}` });
+      }
+    } catch (err) {
+      console.error("Error retrieving filtered journals:", err);
+  
+      if (err.name === "SequelizeUniqueConstraintError") {
+        const errorMessage = err.errors.map((error) => error.message).join(", ");
+        return res
+          .status(StatusCodes.BAD_REQUEST)
+          .json({ message: errorMessage });
+      }
+  
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ message: err.message });
+    }
+  };
+  
+
 
 module.exports = {
   createJournal,
   getAllJournals,
   getSingleJournal,
   updateJournal,
-  deleteJournal
+  deleteJournal,
+  getJournalsByCategory
 };
