@@ -94,7 +94,7 @@ const getSingleJournal = async (req, res) => {
 
     return res.status(StatusCodes.OK).json({ msg: "Single Journal", journal });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     if (err.name === "SequelizeUniqueConstraintError") {
       const errorMessage = err.errors.map((error) => error.message).join(", ");
       return res
@@ -123,12 +123,19 @@ const updateJournal = async (req, res) => {
         .json({ message: "Journal not found" });
     }
 
-    // Update journal entry with new values
-    journal.title = title;
-    journal.content = content;
-    journal.category = category;
-    journal.date = date;
-
+    // Update journal entry with new values if provided
+    if (title) {
+      journal.title = title;
+    }
+    if (content) {
+      journal.content = content;
+    }
+    if (category) {
+      journal.category = category;
+    }
+    if (date) {
+      journal.date = date;
+    }
     // Save the updated journal entry
     await journal.save();
 
@@ -136,7 +143,7 @@ const updateJournal = async (req, res) => {
       .status(StatusCodes.OK)
       .json({ message: "Journal updated successfully", journal });
   } catch (err) {
-    console.error("Error updating journal:", err);
+    // console.error("Error updating journal:", err);
 
     if (err.name === "SequelizeUniqueConstraintError") {
       const errorMessage = err.errors.map((error) => error.message).join(", ");
