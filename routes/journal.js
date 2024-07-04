@@ -5,7 +5,8 @@ const {
   createJournal,
   getAllJournals,
   getSingleJournal,
-  updateJournal,deleteJournal
+  updateJournal,
+  deleteJournal,
 } = require("../controllers/journal");
 const AuthMiddleware = require("../middleware/authMiddleware");
 
@@ -13,6 +14,6 @@ router.post("/createjournal", AuthMiddleware, createJournal);
 router.get("/getAllJournals", AuthMiddleware, getAllJournals);
 router.get("/getSingleJournal/:id", AuthMiddleware, getSingleJournal);
 router.put("/updateJournal/:id", AuthMiddleware, updateJournal);
-router.put("/deleteJournal/:id", AuthMiddleware, deleteJournal);
+router.delete("/deleteJournal/:id", AuthMiddleware, deleteJournal);
 
 module.exports = router;

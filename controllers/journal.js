@@ -162,10 +162,37 @@ const deleteJournal = async(req,res)=>{
 
     try{
 
+        const { id: journalId } = req.params;
+
+        const journal = await journalModel.findByPk(journalId);
+
+        if (!journal) {
+            return res
+              .status(StatusCodes.NOT_FOUND)
+              .json({ message: "Journal not found" });
+          }
+
+          await journal.destroy();
+
+          return res
+           .status(StatusCodes.OK)
+           .json({ message: "Journal deleted successfully" });
+
+
 
     }
     catch(err){
         console.log(err)
+        if (err.name === "SequelizeUniqueConstraintError") {
+            const errorMessage = err.errors.map((error) => error.message).join(", ");
+            return res
+              .status(StatusCodes.BAD_REQUEST)
+              .json({ message: errorMessage });
+          }
+      
+          return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: err.message });
     }
 }
 
