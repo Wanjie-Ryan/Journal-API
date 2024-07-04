@@ -90,23 +90,45 @@ const UpdateProfile = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const user = await userModel.findOne({ where: { username } });
-
-    if (!user) {
-      return res.status(StatusCodes.NOT_FOUND).json({ msg: "User not found" });
+    const token = req.headers.authorization.split(" ")[1];
+    if (!token) {
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .json({ msg: "You are not authorized to update profile" });
     }
 
-    if (user) {
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decodedToken.id;
+
+    if (username || password) {
+      const user = await userModel.findOne({ where: { id: userId } });
+      if (!user) {
+        return res
+          .status(StatusCodes.NOT_FOUND)
+          .json({ msg: "User not found" });
+      }
+
       if (password) {
         const hashedPassword = await bcrypt.hash(password, 10);
         user.password = hashedPassword;
       }
-      user.username = username;
+
+      if (username) {
+        user.username = username;
+      }
+
       await user.save();
-      res.status(StatusCodes.OK).json({ msg: "User updated successfully" });
+
+      return res
+        .status(StatusCodes.OK)
+        .json({ msg: "Profile updated successfully" });
+    } else {
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ msg: "No fields to update" });
     }
   } catch (err) {
-    console.log(err);
+    //   console.log(err);
 
     if (err.name === "SequelizeUniqueConstraintError") {
       const errorMessage = err.errors.map((error) => error.message).join(", ");
