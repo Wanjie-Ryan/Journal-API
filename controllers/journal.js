@@ -70,6 +70,16 @@ const getAllJournals = async (req, res) => {
 
     try{
 
+        const {id:journalId} = req.params;
+
+        const journal = await journalModel.findByPk(journalId);
+
+        if(!journal){
+            return res.status(StatusCodes.NOT_FOUND).json({msg: 'Journal not found'});
+        }
+
+        return res.status(StatusCodes.OK).json({msg: 'Single Journal', journal});
+
 
     }
     catch(err){

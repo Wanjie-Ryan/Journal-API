@@ -8,6 +8,7 @@ const AuthMiddleware = require("../middleware/authMiddleware");
 
 router.post("/createjournal", AuthMiddleware, createJournal);
 router.get("/getAllJournals", AuthMiddleware, getAllJournals);
+router.get("/getSingleJournal/:id", AuthMiddleware, getSingleJournal);
 
 
 module.exports = router;
