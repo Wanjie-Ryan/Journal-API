@@ -1,7 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
-const jwt = require("jsonwebtoken");
+const { Op, fn, col, literal } = require("sequelize");
 const journalModel = require("../models/journal");
-const { Op } = require("sequelize");
 
 const getJournalSummary = async (req, res) => {
   try {
@@ -35,18 +34,19 @@ const getJournalSummary = async (req, res) => {
     // Define the grouping period
     let groupBy;
     if (period === "daily") {
-      groupBy = "day";
+      groupBy = literal("DATE(date)");
     } else if (period === "weekly") {
-      groupBy = "week";
+      groupBy = literal("YEARWEEK(date, 1)");
     } else if (period === "monthly") {
-      groupBy = "month";
+      groupBy = literal("MONTH(date)");
     }
 
     // Fetch and summarize journal entries
     const journals = await journalModel.findAll({
       attributes: [
-        [sequelize.fn("date_trunc", groupBy, sequelize.col("date")), "period"],
-        [sequelize.fn("COUNT", sequelize.col("id")), "entryCount"],
+        [groupBy, "period"],
+        [fn("COUNT", col("id")), "entryCount"],
+        [fn("GROUP_CONCAT", col("title")), "titles"], // Concatenate titles into a single string
       ],
       where: {
         date: {
@@ -54,18 +54,19 @@ const getJournalSummary = async (req, res) => {
         },
       },
       group: ["period"],
-      order: [["period", "ASC"]],
+      order: [[literal("period"), "ASC"]],
     });
 
+    // Convert the result to JSON format and send the response
     return res.status(StatusCodes.OK).json({ period, journals });
   } catch (err) {
-    console.error("Error fetching journal summary:", err);
+    // console.error("Error fetching journal summary:", err);
     if (err.name === "SequelizeUniqueConstraintError") {
-        const errorMessage = err.errors.map((error) => error.message).join(", ");
-        return res
-          .status(StatusCodes.BAD_REQUEST)
-          .json({ message: errorMessage });
-      }
+      const errorMessage = err.errors.map((error) => error.message).join(", ");
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .json({ message: errorMessage });
+    }
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: "Something went wrong, try again later" });
