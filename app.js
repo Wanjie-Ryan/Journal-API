@@ -12,6 +12,7 @@ const { StatusCodes } = require("http-status-codes");
 const userRoutes = require("./routes/userAuth");
 const journalRoutes = require("./routes/journal");
 const SummaryjournalRoutes = require("./routes/summary");
+const { swaggerUi, specs } = require("./swagger");
 const app = express();
 
 // END OF IMPORTS
@@ -35,6 +36,9 @@ app.use(cors());
 app.use("/api/auth", userRoutes);
 app.use("/api/v1", journalRoutes);
 app.use("/api/summary", SummaryjournalRoutes);
+
+// Swagger setup
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // SERVER START-UP
 
