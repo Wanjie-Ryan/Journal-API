@@ -12,9 +12,35 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:3005",
+        url: "http://localhost:3000",
       },
     ],
+    components: {
+      schemas: {
+        Journal: {
+          type: "object",
+          properties: {
+            title: {
+              type: "string",
+              description: "The journal title",
+            },
+            content: {
+              type: "string",
+              description: "The journal content",
+            },
+            date: {
+              type: "string",
+              format: "date",
+              description: "The journal creation date",
+            },
+            category: {
+              type: "string",
+              description: "The journal category",
+            },
+          },
+        },
+      },
+    },
   },
   apis: ["./routes/journal.js", "./routes/summary.js", "./routes/userAuth.js"],
 };
