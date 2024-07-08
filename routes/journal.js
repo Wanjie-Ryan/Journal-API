@@ -20,7 +20,7 @@ const AuthMiddleware = require("../middleware/authMiddleware");
 
 /**
  * @swagger
- * /api/journals/createjournal:
+ * /api/v1/createjournal:
  *   post:
  *     summary: Create a new journal
  *     tags: [Journals]
@@ -40,7 +40,7 @@ router.post("/createjournal", AuthMiddleware, createJournal);
 
 /**
  * @swagger
- * /api/journals/getAllJournals:
+ * /api/v1/getAllJournals:
  *   get:
  *     summary: Retrieve a list of journals
  *     tags: [Journals]
@@ -60,7 +60,7 @@ router.get("/getAllJournals", AuthMiddleware, getAllJournals);
 
 /**
  * @swagger
- * /api/journals/getSingleJournal/{id}:
+ * /api/v1/getSingleJournal/{id}:
  *   get:
  *     summary: Retrieve a single journal by ID
  *     tags: [Journals]
@@ -85,7 +85,7 @@ router.get("/getSingleJournal/:id", AuthMiddleware, getSingleJournal);
 
 /**
  * @swagger
- * /api/journals/updateJournal/{id}:
+ * /api/v1/updateJournal/{id}:
  *   put:
  *     summary: Update a journal by ID
  *     tags: [Journals]
@@ -112,7 +112,7 @@ router.put("/updateJournal/:id", AuthMiddleware, updateJournal);
 
 /**
  * @swagger
- * /api/journals/deleteJournal/{id}:
+ * /api/v1/deleteJournal/{id}:
  *   delete:
  *     summary: Delete a journal by ID
  *     tags: [Journals]
@@ -133,7 +133,7 @@ router.delete("/deleteJournal/:id", AuthMiddleware, deleteJournal);
 
 /**
  * @swagger
- * /api/journals/categoryJournals:
+ * /api/v1/categoryJournals:
  *   get:
  *     summary: Retrieve journals by category
  *     tags: [Journals]
