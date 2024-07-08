@@ -65,6 +65,12 @@ npm start
 
 This command will start the Node.js server locally on your machine.
 
+### API Documentation with Swagger
+
+API endpoints have been documented using Swagger. You can explore and interact with the API documentation at:
+
+http://localhost:3005/api-docs/
+
 ### Additional Notes
 
 - **Sequelize Migration:** Sequelize migrations allow for automatic creation of database tables based on defined models. This simplifies setup for new users, as tables will be created automatically upon starting the server.
@@ -72,3 +78,4 @@ This command will start the Node.js server locally on your machine.
 - **Running the Frontend:** For the frontend to interact with the backend, ensure that the backend server is running and accessible. Update any frontend API calls to use your local IP address and port configured in the backend server.
 
 By following these steps, you should be able to set up and run the backend server locally on your machine. If you encounter any issues or have questions, feel free to reach out for support.
+
