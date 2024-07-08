@@ -15,7 +15,7 @@ const AuthMiddleware = require("../middleware/authMiddleware");
  * @swagger
  * tags:
  *   name: Journals
- *   description: API to manage journals
+ *   description: CRUD Operations for the Journal API, together with the filter by category endpoint, all authenticated
  */
 
 /**

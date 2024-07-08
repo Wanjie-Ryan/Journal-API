@@ -7,7 +7,7 @@ const AuthMiddleware = require("../middleware/authMiddleware");
  * @swagger
  * tags:
  *   name: Summary
- *   description: Endpoint for getting the summary of journals based on the period given by the user
+ *   description: Endpoint for getting the summary of journals based on the period given by the user, authenticated route.
  */
 
 /**
