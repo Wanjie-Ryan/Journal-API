@@ -50,7 +50,7 @@ Update the `.env` file with your local MySQL database details. Replace the place
 ```dotenv
 DB_NAME=journal
 DB_USER=
-DB_PASS= 
+DB_PASS=
 DB_HOST=
 DB_DIALECT=mysql
 ```
@@ -72,4 +72,3 @@ This command will start the Node.js server locally on your machine.
 - **Running the Frontend:** For the frontend to interact with the backend, ensure that the backend server is running and accessible. Update any frontend API calls to use your local IP address and port configured in the backend server.
 
 By following these steps, you should be able to set up and run the backend server locally on your machine. If you encounter any issues or have questions, feel free to reach out for support.
-
